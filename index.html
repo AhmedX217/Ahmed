@@ -29,6 +29,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html, body {
   height: 100%;
+  width: 100%;
 }
 body {
   font-family: 'Poppins', sans-serif;
@@ -66,6 +67,30 @@ canvas {
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
+}
+
+/* Slide transition effect */
+body.slide-transition {
+  overflow: hidden;
+}
+.slide-overlay {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  animation: slideIn 0.6s forwards;
+}
+@keyframes slideIn {
+  0% {left:-100%;}
+  100% {left:0;}
+}
+@keyframes slideOut {
+  0% {left:0;}
+  100% {left:100%;}
 }
 
 /* Header */
@@ -111,6 +136,7 @@ header p.done { border-right: none; }
 /* Icons */
 .icons{
   display:flex;justify-content:center;gap:1rem;margin:1rem 0;
+  flex-wrap: wrap;
 }
 .icons div{
   width:65px;height:65px;border-radius:50%;
@@ -181,6 +207,13 @@ footer{
 .light-mode .icons div:hover{
   color:#5b4031;box-shadow:0 0 18px rgba(138,110,82,0.4);
 }
+
+/* Responsive */
+@media (max-width:768px){
+  header h1{font-size:2rem;}
+  .icons div{width:55px;height:55px;font-size:1.3rem;}
+  .links a{padding:0.8rem;font-size:0.95rem;}
+}
 </style>
 </head>
 <body>
@@ -209,6 +242,8 @@ footer{
 <footer>
   © 2025 Ahmed • All Rights Reserved
 </footer>
+
+<div id="slideOverlay" class="slide-overlay" style="display:none;"></div>
 
 <script>
 // Particle Background Animation
@@ -274,27 +309,39 @@ document.querySelectorAll('.icons div, .links a').forEach((el,i)=>{
   setTimeout(()=>el.classList.add('show'), 800 + i*150);
 });
 
-// Theme toggle
+// Theme toggle with Slide effect
 const toggleBtn=document.getElementById('themeToggle');
+const slideOverlay=document.getElementById('slideOverlay');
+
 if(localStorage.getItem("theme")==="light"){
   document.body.classList.add("light-mode");
   toggleBtn.querySelector("i").classList.replace("fa-moon","fa-sun");
   particlesArray.forEach(p=>p.color = colorsLight[Math.floor(Math.random()*colorsLight.length)]);
 }
+
 toggleBtn.addEventListener("click",()=>{
   toggleBtn.classList.add("pressed");
   setTimeout(()=>toggleBtn.classList.remove("pressed"),150);
-  document.body.classList.toggle("light-mode");
-  const icon=toggleBtn.querySelector("i");
-  if(document.body.classList.contains("light-mode")){
-    icon.classList.replace("fa-moon","fa-sun");
-    localStorage.setItem("theme","light");
-    particlesArray.forEach(p=>p.color = colorsLight[Math.floor(Math.random()*colorsLight.length)]);
-  } else {
-    icon.classList.replace("fa-sun","fa-moon");
-    localStorage.setItem("theme","dark");
-    particlesArray.forEach(p=>p.color = colorsDark[Math.floor(Math.random()*colorsDark.length)]);
-  }
+
+  slideOverlay.style.display="block";
+  slideOverlay.style.animation="slideIn 0.3s forwards";
+
+  setTimeout(()=>{
+    document.body.classList.toggle("light-mode");
+    const icon=toggleBtn.querySelector("i");
+    if(document.body.classList.contains("light-mode")){
+      icon.classList.replace("fa-moon","fa-sun");
+      localStorage.setItem("theme","light");
+      particlesArray.forEach(p=>p.color = colorsLight[Math.floor(Math.random()*colorsLight.length)]);
+    } else {
+      icon.classList.replace("fa-sun","fa-moon");
+      localStorage.setItem("theme","dark");
+      particlesArray.forEach(p=>p.color = colorsDark[Math.floor(Math.random()*colorsDark.length)]);
+    }
+
+    slideOverlay.style.animation="slideOut 0.3s forwards";
+    setTimeout(()=>{slideOverlay.style.display="none";},300);
+  },300);
 });
 
 // Links click open
