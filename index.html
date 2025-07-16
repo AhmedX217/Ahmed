@@ -34,14 +34,14 @@ body {
   font-family: 'Poppins', sans-serif;
   background: var(--dark-bg1);
   color: var(--dark-text);
-  transition: background 0.6s ease, color 0.6s ease;
-  animation: blurFadeIn 1.2s ease forwards;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   position: relative;
   opacity: 0;
   filter: blur(20px);
+  animation: blurFadeIn 1.2s ease forwards;
+  transition: background 0.6s ease, color 0.6s ease;
 }
 @keyframes blurFadeIn {
   0% {filter: blur(20px); opacity: 0;}
@@ -107,14 +107,27 @@ header p.done { border-right: none; }
 .theme-toggle{
   position:fixed;top:20px;right:20px;
   background:rgba(255,255,255,0.12);
-  padding:10px;border-radius:12px;cursor:pointer;
+  padding:10px;border-radius:50%;
+  cursor:pointer;
   backdrop-filter:blur(8px);
-  transition:transform 0.2s ease, background 0.3s ease;
+  transition:transform 0.25s ease, background 0.3s ease;
   z-index: 100;
 }
 .theme-toggle:hover{background:rgba(255,255,255,0.22);}
+.theme-toggle:active {transform: scale(0.85);}
 .theme-toggle i{font-size:1.3rem;color:var(--dark-accent);}
-.theme-toggle.pressed {transform: scale(0.85);}
+
+/* Ripple Effect */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  background: rgba(255,255,255,0.5);
+}
+@keyframes ripple {
+  to {transform: scale(4); opacity: 0;}
+}
 
 /* Icons Section */
 .icons{
@@ -130,6 +143,8 @@ header p.done { border-right: none; }
   color:var(--dark-accent);
   backdrop-filter:blur(10px);
   transition:all .3s ease;
+  position:relative;
+  overflow:hidden;
 }
 .icons div.show{
   animation:fadeSlide .6s forwards ease;
@@ -138,8 +153,8 @@ header p.done { border-right: none; }
   to{opacity:1;transform:translateY(0);}
 }
 .icons div:hover{
-  transform:scale(1.2);
-  box-shadow:0 0 18px rgba(255,255,255,0.4);
+  transform:scale(1.15);
+  box-shadow:0 0 18px rgba(255,255,255,0.5);
   color:#fff;
 }
 
@@ -155,7 +170,8 @@ header p.done { border-right: none; }
   backdrop-filter:blur(10px);
   font-weight:500;position:relative;
   opacity:0;transform:translateY(20px);
-  transition:background .3s,color .3s;
+  transition:background .3s,color .3s, transform 0.2s;
+  overflow:hidden;
 }
 .links a.show{
   animation:fadeSlide .6s forwards ease;
@@ -164,6 +180,7 @@ header p.done { border-right: none; }
   background:rgba(255,255,255,0.18);
   box-shadow:0 0 15px rgba(255,255,255,0.3);
   color:#fff;
+  transform: scale(1.02);
 }
 
 /* Footer */
@@ -228,7 +245,7 @@ footer{
 </footer>
 
 <script>
-// Particles
+// Particle Background
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 let particlesArray = [];
@@ -291,6 +308,21 @@ document.querySelectorAll('.icons div, .links a').forEach((el,i)=>{
   setTimeout(()=>el.classList.add('show'), 800 + i*150);
 });
 
+// Ripple Effect on buttons
+function addRippleEffect(e){
+  const ripple = document.createElement('span');
+  ripple.classList.add('ripple');
+  this.appendChild(ripple);
+  const size = Math.max(this.offsetWidth, this.offsetHeight);
+  ripple.style.width = ripple.style.height = size + 'px';
+  ripple.style.left = (e.clientX - this.getBoundingClientRect().left - size/2)+'px';
+  ripple.style.top = (e.clientY - this.getBoundingClientRect().top - size/2)+'px';
+  setTimeout(()=>ripple.remove(),600);
+}
+document.querySelectorAll('.icons div, .links a').forEach(el=>{
+  el.addEventListener('click',addRippleEffect);
+});
+
 // Theme toggle
 const toggleBtn=document.getElementById('themeToggle');
 if(localStorage.getItem("theme")==="light"){
@@ -314,7 +346,7 @@ toggleBtn.addEventListener("click",()=>{
   }
 });
 
-// Open links
+// Links click open
 document.querySelectorAll("[data-link]").forEach(el=>{
   el.addEventListener("click",()=>{
     window.open(el.getAttribute("data-link"),"_blank");
