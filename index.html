@@ -15,7 +15,6 @@
   --dark-bg3: #D2B48C;
   --dark-text: #fdf7f2;
   --dark-accent: #f1e4d3;
-  --dark-hover: #e8d6c4;
 
   /* Light Mode */
   --light-bg1: #ffffff;
@@ -35,23 +34,21 @@ body {
   font-family: 'Poppins', sans-serif;
   background: var(--dark-bg1);
   color: var(--dark-text);
-  overflow-x:hidden;
   transition: background 0.6s ease, color 0.6s ease;
-  filter: blur(20px);
-  opacity: 0;
   animation: blurFadeIn 1.2s ease forwards;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   min-height: 100vh;
   position: relative;
+  opacity: 0;
+  filter: blur(20px);
 }
 @keyframes blurFadeIn {
   0% {filter: blur(20px); opacity: 0;}
   100% {filter: blur(0); opacity: 1;}
 }
 
-/* Fullscreen Canvas for animation */
+/* Fullscreen Canvas */
 canvas {
   position: fixed;
   top: 0; left: 0;
@@ -69,42 +66,27 @@ canvas {
   100%{background-position:0% 50%}
 }
 
-/* Slide transition effect */
-body.slide-transition {
-  overflow: hidden;
-}
-.slide-overlay {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(10px);
-  z-index: 9999;
-  animation: slideIn 0.6s forwards;
-}
-@keyframes slideIn {
-  0% {left:-100%;}
-  100% {left:0;}
-}
-@keyframes slideOut {
-  0% {left:0;}
-  100% {left:100%;}
+/* Container */
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
+  text-align: center;
+  padding: 2rem 1rem;
 }
 
 /* Header */
 header{
-  text-align:center;padding:2rem;
+  margin-bottom: 2rem;
 }
 header h1{
-  font-size:2.8rem;
+  font-size:3rem;
   font-family: 'Playfair Display', serif;
   margin-bottom:.4rem;
 }
 header p{
   color:#ccc;
-  font-size:1.1rem;
+  font-size:1.2rem;
   overflow:hidden;
   border-right:.15em solid var(--dark-accent);
   white-space:nowrap;
@@ -123,26 +105,27 @@ header p.done { border-right: none; }
 
 /* Theme toggle */
 .theme-toggle{
-  position:absolute;top:20px;right:20px;
+  position:fixed;top:20px;right:20px;
   background:rgba(255,255,255,0.12);
   padding:10px;border-radius:12px;cursor:pointer;
   backdrop-filter:blur(8px);
   transition:transform 0.2s ease, background 0.3s ease;
+  z-index: 100;
 }
 .theme-toggle:hover{background:rgba(255,255,255,0.22);}
 .theme-toggle i{font-size:1.3rem;color:var(--dark-accent);}
 .theme-toggle.pressed {transform: scale(0.85);}
 
-/* Icons */
+/* Icons Section */
 .icons{
-  display:flex;justify-content:center;gap:1rem;margin:1rem 0;
-  flex-wrap: wrap;
+  display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;
+  margin: 1.5rem 0;
 }
 .icons div{
-  width:65px;height:65px;border-radius:50%;
+  width:70px;height:70px;border-radius:50%;
   background:rgba(255,255,255,0.08);
   display:flex;align-items:center;justify-content:center;
-  font-size:1.6rem;cursor:pointer;
+  font-size:1.8rem;cursor:pointer;
   opacity:0;transform:translateY(20px);
   color:var(--dark-accent);
   backdrop-filter:blur(10px);
@@ -160,10 +143,10 @@ header p.done { border-right: none; }
   color:#fff;
 }
 
-/* Links */
+/* Links Section */
 .links{
   display:flex;flex-direction:column;gap:1rem;
-  width:90%;max-width:400px;margin:2rem auto;
+  width:100%;max-width:400px;margin:2rem auto;
 }
 .links a{
   display:block;text-align:center;padding:1rem;border-radius:14px;
@@ -194,8 +177,6 @@ footer{
 }
 .light-mode canvas{
   background:linear-gradient(-45deg,var(--light-bg1),var(--light-bg2),var(--light-bg3));
-  background-size:400% 400%;
-  animation:gradientMove 10s ease infinite;
 }
 .light-mode .theme-toggle i{color:var(--light-accent);}
 .light-mode .links a{
@@ -219,34 +200,35 @@ footer{
 <body>
 <canvas id="bgCanvas"></canvas>
 
-<header>
-  <h1>Ahmed's Info</h1>
-  <p id="typing">Welcome to my Hub</p>
-  <div class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></div>
-</header>
+<div class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></div>
 
-<section class="icons">
-  <div data-link="https://discord.com/users/530495809842839572"><i class="fab fa-discord"></i></div>
-  <div data-link="https://www.instagram.com/its.mvdo?igsh=aG9uc3Z6OGI2YjVs"><i class="fab fa-instagram"></i></div>
-  <div data-link="https://www.tiktok.com/@a7med.871?_t=ZS-8y3wONT9fRy&_r=1"><i class="fab fa-tiktok"></i></div>
-  <div data-link="https://open.spotify.com/user/312zfaqdqezdlli2m6awhduu7xee?si=yHsPC9GbSiOf7iHLbC8Qnw"><i class="fab fa-spotify"></i></div>
-</section>
+<div class="container">
+  <header>
+    <h1>Ahmed's Info</h1>
+    <p id="typing">Welcome to my Hub</p>
+  </header>
 
-<section class="links">
-  <a data-link="https://discord.com/users/530495809842839572"><i class="fab fa-discord"></i> Discord Profile</a>
-  <a data-link="https://www.instagram.com/its.mvdo?igsh=aG9uc3Z6OGI2YjVs"><i class="fab fa-instagram"></i> Instagram</a>
-  <a data-link="https://www.tiktok.com/@a7med.871?_t=ZS-8y3wONT9fRy&_r=1"><i class="fab fa-tiktok"></i> TikTok</a>
-  <a data-link="https://open.spotify.com/user/312zfaqdqezdlli2m6awhduu7xee?si=yHsPC9GbSiOf7iHLbC8Qnw"><i class="fab fa-spotify"></i> Spotify</a>
-</section>
+  <section class="icons">
+    <div data-link="https://discord.com/users/530495809842839572"><i class="fab fa-discord"></i></div>
+    <div data-link="https://www.instagram.com/its.mvdo"><i class="fab fa-instagram"></i></div>
+    <div data-link="https://www.tiktok.com/@a7med.871"><i class="fab fa-tiktok"></i></div>
+    <div data-link="https://open.spotify.com/user/312zfaqdqezdlli2m6awhduu7xee"><i class="fab fa-spotify"></i></div>
+  </section>
+
+  <section class="links">
+    <a data-link="https://discord.com/users/530495809842839572"><i class="fab fa-discord"></i> Discord Profile</a>
+    <a data-link="https://www.instagram.com/its.mvdo"><i class="fab fa-instagram"></i> Instagram</a>
+    <a data-link="https://www.tiktok.com/@a7med.871"><i class="fab fa-tiktok"></i> TikTok</a>
+    <a data-link="https://open.spotify.com/user/312zfaqdqezdlli2m6awhduu7xee"><i class="fab fa-spotify"></i> Spotify</a>
+  </section>
+</div>
 
 <footer>
   © 2025 Ahmed • All Rights Reserved
 </footer>
 
-<div id="slideOverlay" class="slide-overlay" style="display:none;"></div>
-
 <script>
-// Particle Background Animation
+// Particles
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 let particlesArray = [];
@@ -304,54 +286,41 @@ function animate(){
 init();
 animate();
 
-// Show initial animation
+// Show animations
 document.querySelectorAll('.icons div, .links a').forEach((el,i)=>{
   setTimeout(()=>el.classList.add('show'), 800 + i*150);
 });
 
-// Theme toggle with Slide effect
+// Theme toggle
 const toggleBtn=document.getElementById('themeToggle');
-const slideOverlay=document.getElementById('slideOverlay');
-
 if(localStorage.getItem("theme")==="light"){
   document.body.classList.add("light-mode");
   toggleBtn.querySelector("i").classList.replace("fa-moon","fa-sun");
   particlesArray.forEach(p=>p.color = colorsLight[Math.floor(Math.random()*colorsLight.length)]);
 }
-
 toggleBtn.addEventListener("click",()=>{
   toggleBtn.classList.add("pressed");
   setTimeout(()=>toggleBtn.classList.remove("pressed"),150);
-
-  slideOverlay.style.display="block";
-  slideOverlay.style.animation="slideIn 0.3s forwards";
-
-  setTimeout(()=>{
-    document.body.classList.toggle("light-mode");
-    const icon=toggleBtn.querySelector("i");
-    if(document.body.classList.contains("light-mode")){
-      icon.classList.replace("fa-moon","fa-sun");
-      localStorage.setItem("theme","light");
-      particlesArray.forEach(p=>p.color = colorsLight[Math.floor(Math.random()*colorsLight.length)]);
-    } else {
-      icon.classList.replace("fa-sun","fa-moon");
-      localStorage.setItem("theme","dark");
-      particlesArray.forEach(p=>p.color = colorsDark[Math.floor(Math.random()*colorsDark.length)]);
-    }
-
-    slideOverlay.style.animation="slideOut 0.3s forwards";
-    setTimeout(()=>{slideOverlay.style.display="none";},300);
-  },300);
+  document.body.classList.toggle("light-mode");
+  const icon=toggleBtn.querySelector("i");
+  if(document.body.classList.contains("light-mode")){
+    icon.classList.replace("fa-moon","fa-sun");
+    localStorage.setItem("theme","light");
+    particlesArray.forEach(p=>p.color = colorsLight[Math.floor(Math.random()*colorsLight.length)]);
+  } else {
+    icon.classList.replace("fa-sun","fa-moon");
+    localStorage.setItem("theme","dark");
+    particlesArray.forEach(p=>p.color = colorsDark[Math.floor(Math.random()*colorsDark.length)]);
+  }
 });
 
-// Links click open
+// Open links
 document.querySelectorAll("[data-link]").forEach(el=>{
   el.addEventListener("click",()=>{
     window.open(el.getAttribute("data-link"),"_blank");
   });
 });
 
-// Remove typing cursor after typing done
 setTimeout(()=>document.getElementById("typing").classList.add("done"), 2700);
 </script>
 </body>
